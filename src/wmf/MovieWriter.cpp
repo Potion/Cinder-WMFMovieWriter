@@ -38,22 +38,21 @@ namespace cinder
 			ci::geom::Rect rect( mFbo->getBounds() );
 
 			mGlsl = ci::gl::GlslProg::create( ci::gl::GlslProg::Format()
-			                                  .vertex( CI_GLSL( 150,
+			                                  .vertex( CI_GLSL( 330,
 			                                          uniform mat4 ciModelViewProjection;
 			                                          in vec4 ciPosition;
 			                                          in vec2 ciTexCoord0;
-			                                          out vec2 TexCoord0;
+			                                          out highp vec2 TexCoord0;
 
 			void main( void ) {
 				gl_Position = ciModelViewProjection *  ciPosition;
 				TexCoord0 = ciTexCoord0;
 			} ) )
-			.fragment( CI_GLSL( 150,
-			                    out vec4 oColor;
-			                    in vec2 TexCoord0;
+			.fragment( CI_GLSL( 330,
+			                    uniform sampler2D uTexture;
 			                    uniform bool uFlipY = false;
 
-			                    uniform sampler2D	uTexture;
+			                    in vec2 TexCoord0;
 
 			void main( void ) {
 				vec2 st = TexCoord0;
@@ -63,11 +62,7 @@ namespace cinder
 				}
 
 				vec4 colorTex = texture( uTexture, st );
-				vec3 output;
-				output.r = colorTex.b;
-				output.g = colorTex.g;
-				output.b = colorTex.r;
-				oColor = vec4( output, 1.0 );
+				gl_FragColor = vec4( colorTex.bgr, 1.0 );
 			} ) ) );
 
 			mBatch = ci::gl::Batch::create( rect, mGlsl );
@@ -275,16 +270,14 @@ namespace cinder
 
 			gl::pushMatrices();
 			gl::ScopedFramebuffer fbScp( mFbo );
-			gl::clear( Color( 0.05, 0.05f, 0.25f ) );
+			gl::clear( Color( 1.0f, 1.0f, 1.0f ) );
 			gl::setMatricesWindow( mFbo->getSize() );
-			gl::color( ColorA( 1, 1, 1, 1 ) );
+			gl::color( Color( 1.0f, 1.0f, 1.0f ) );
 			gl::ScopedViewport scpVp( ivec2( 0 ), mFbo->getSize() );
-			gl::ScopedFramebuffer fbScpFlip( mFbo );
 
 			if( textureSource ) {
-				int id = textureSource->getId();
-				textureSource->bind( id );
-				mGlsl->uniform( "uTexture", id );
+				textureSource->bind();
+				mGlsl->uniform( "uTexture", 0 );
 			}
 
 			mGlsl->uniform( "uFlipY", mFormat.getCodec() == H264 );
