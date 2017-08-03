@@ -19,18 +19,18 @@
 #pragma comment(lib, "mf")
 #pragma comment(lib, "shlwapi")
 
-template <class T> void SafeRelease( T** ppT )
-{
-	if( *ppT ) {
-		( *ppT )->Release();
-		*ppT = NULL;
-	}
-}
-
 namespace cinder
 {
 	namespace wmf
 	{
+		template <class T> void SafeRelease( T** ppT )
+		{
+			if( *ppT ) {
+				( *ppT )->Release();
+				*ppT = NULL;
+			}
+		}
+
 		class MovieWriter;
 		typedef std::shared_ptr<MovieWriter> MovieWriterRef;
 
