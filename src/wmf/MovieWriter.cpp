@@ -79,6 +79,10 @@ namespace cinder
 				DWORD           streamIndex;
 				LPCWSTR			file = path.c_str();
 
+				// make sure directories exist
+				std::string pathString = path.string();
+				std::experimental::filesystem::create_directories( ci::fs::path( pathString ).remove_filename() );
+
 				HRESULT hr = MFCreateSinkWriterFromURL( file, NULL, NULL, &pSinkWriter );
 
 				// Set the output media type.
