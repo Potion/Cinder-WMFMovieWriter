@@ -52,6 +52,8 @@ namespace cinder
 						Codec		getCodec() const { return mCodec; }
 						//! Sets the encoding codec. Default is \c Codec::H264
 						Format&		codec( Codec codec ) { mCodec = codec; return *this; }
+						//! Sets the encoding bitrate. Default is \c 5120000.
+						Format&		bitrate( int bitrate ) { mVideoBitRate = bitrate; return *this; }
 
 						GUID		getVideoInputFormat() { return mVideoInputFormat; };
 						UINT32		getVideoBitRate() { return mVideoBitRate; };

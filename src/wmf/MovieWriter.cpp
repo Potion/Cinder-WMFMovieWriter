@@ -57,12 +57,12 @@ namespace cinder
 			void main( void ) {
 				vec2 st = TexCoord0;
 
-				if( uFlipY ) {
-					st.y = 1 - st.y;
-				}
+				//if( uFlipY ) {
+				//	st.y = 1 - st.y;
+				//}
 
 				vec4 colorTex = texture( uTexture, st );
-				gl_FragColor = vec4( colorTex.bgr, 1.0 );
+				gl_FragColor = vec4( 0. );
 			} ) ) );
 
 			mBatch = ci::gl::Batch::create( rect, mGlsl );
